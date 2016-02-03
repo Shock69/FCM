@@ -1,15 +1,12 @@
-﻿namespace FCM
+﻿using System.Collections.Generic;
+
+namespace FCM
 {
     public class ClusterPoint
     {
         /// Gets or sets X-coord of the point
         ///
-        public double X { get; set; }
-
-        ///
-        /// Gets or sets Y-coord of the point
-        ///
-        public double Y { get; set; }
+        public List<double> Data { get; set; }
 
         ///
         /// Gets or sets some additional data for point
@@ -26,10 +23,9 @@
         ///
         /// X-coord
         /// Y-coord
-        public ClusterPoint(double x, double y)
+        public ClusterPoint(List<double> data)
         {
-            X = x;
-            Y = y;
+            Data = data;
             ClusterIndex = -1;
         }
 
@@ -38,10 +34,9 @@
         ///
         /// X-coord
         /// Y-coord
-        public ClusterPoint(double x, double y, object tag)
+        public ClusterPoint(List<double> data, object tag)
         {
-            X = x;
-            Y = y;
+            Data = data;
             Tag = tag;
             ClusterIndex = -1;
         }
