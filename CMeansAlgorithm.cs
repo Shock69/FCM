@@ -76,7 +76,7 @@ namespace FCM
                 for (int j = 0; j < m_Clusters.Count; j++)
                 {
                     ClusterCentroid c = m_Clusters[j];
-                    var diff = Math.Sqrt(Math.Pow(p.X - c.X, 2.0) + Math.Pow(p.Y - c.Y, 2.0));
+                    var diff = CalculateEulerDistance(p, c);
                     U[i, j] = (diff == 0) ? m_Eps : diff;
                     sum += U[i, j];
                 }
@@ -155,7 +155,12 @@ namespace FCM
         /// Calculated distance
         private double CalculateEulerDistance(ClusterPoint p, ClusterCentroid c)
         {
-            return Math.Sqrt(Math.Pow(p.X - c.X, 2) + Math.Pow(p.Y - c.Y, 2));
+            double sum = 0;
+            for(int i=0; i<p.Data.Count; i++)
+            {
+                sum += Math.Pow(p.Data[i] - c.Data[i], 2);
+            }
+            return Math.Sqrt(sum);
         }
 
         ///
@@ -184,8 +189,11 @@ namespace FCM
             for (int j = 0; j < m_Clusters.Count; j++)
             {
                 ClusterCentroid c = m_Clusters[j];
-                double uX = 0.0;
-                double uY = 0.0;
+                List<double> uData = new List<double>();
+                for (int k = 0; k < c.Data.Count; k++)
+                {
+                    uData.Add(0);
+                }
                 double l = 0.0;
 
                 for (int i = 0; i < m_Points.Count; i++)
@@ -193,15 +201,19 @@ namespace FCM
                     ClusterPoint p = m_Points[i];
 
                     double uu = Math.Pow(U[i, j], m_Fuzzyness);
-                    uX += uu * c.X;
-                    uY += uu * c.Y;
+                    for(int k = 0; k < c.Data.Count; k++)
+                    {
+                        uData[k] += uu * c.Data[k];
+                    }
                     l += uu;
                 }
 
-                c.X = (int)(uX / l);
-                c.Y = (int)(uY / l);
+                for (int k = 0; k < c.Data.Count; k++)
+                {
+                    c.Data[k] = uData[k] / l;
+                }
 
-                Log += string.Format("Cluster Centroid: ({0}; {1})" + Environment.NewLine, c.X, c.Y);
+                Log += string.Format("Cluster Centroid: ({0})" + Environment.NewLine, c.Data);
             }
         }
 

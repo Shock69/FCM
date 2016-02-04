@@ -1,4 +1,6 @@
-﻿namespace FCM
+﻿using System.Collections.Generic;
+
+namespace FCM
 {
     public class ClusterCentroid : ClusterPoint
     {
@@ -8,8 +10,8 @@
         ///
         /// Centroid x-coord
         /// Centroid y-coord
-        public ClusterCentroid(double x, double y)
-            : base(x, y)
+        public ClusterCentroid(List<double> data)
+            : base(data)
         {
         }
     }
